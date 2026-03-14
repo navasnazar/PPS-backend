@@ -1,5 +1,4 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-
 import { Server } from 'socket.io';
 
 @WebSocketGateway({
@@ -8,10 +7,12 @@ import { Server } from 'socket.io';
   },
 })
 export class DashboardGateway {
+
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   emitDashboardUpdate(data: any) {
     this.server.emit('dashboardUpdate', data);
   }
+
 }

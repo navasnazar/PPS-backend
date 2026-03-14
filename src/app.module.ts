@@ -10,6 +10,7 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ActivityLogsModule } from './modules/activitylogs/activitylogs.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { NotificationsModule } from './modules/notifications/notifications.module';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
     }),
 
     MongooseModule.forRoot(process.env.MONGO_URI!),
-
+    CoreModule,
     AuthModule,
     UsersModule,
     OrganizationsModule,

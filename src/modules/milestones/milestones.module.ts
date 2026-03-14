@@ -5,6 +5,7 @@ import { Milestone, MilestoneSchema } from './milestones.schema';
 import { MilestonesService } from './milestones.service';
 import { MilestonesController } from './milestones.controller';
 import { ActivityLogsModule } from '../activitylogs/activitylogs.module';
+import { ProjectsModule } from '../projects/projects.module';
 
 @Module({
   imports: [
@@ -12,8 +13,9 @@ import { ActivityLogsModule } from '../activitylogs/activitylogs.module';
       { name: Milestone.name, schema: MilestoneSchema },
     ]),
     ActivityLogsModule,
+    ProjectsModule,
   ],
   providers: [MilestonesService],
   controllers: [MilestonesController],
 })
-export class MilestonesModule {}
+export class MilestonesModule { }

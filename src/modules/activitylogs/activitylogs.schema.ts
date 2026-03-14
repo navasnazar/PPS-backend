@@ -25,3 +25,11 @@ export class ActivityLog {
 }
 
 export const ActivityLogSchema = SchemaFactory.createForClass(ActivityLog);
+
+ActivityLogSchema.index(
+  { entityType: 1, entityId: 1, createdAt: -1 }
+);
+
+ActivityLogSchema.index(
+  { organizationId: 1, createdAt: -1 }
+);

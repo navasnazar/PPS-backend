@@ -12,7 +12,7 @@ export class AllocationsService {
     @InjectModel(Allocation.name)
     private allocationModel: Model<AllocationDocument>,
     private activityLogsService: ActivityLogsService,
-  ) {}
+  ) { }
 
   async createAllocation(dto: CreateAllocationDto, user: any) {
     const existing = await this.allocationModel.findOne({
@@ -47,5 +47,57 @@ export class AllocationsService {
       milestoneId,
       organizationId: user.organizationId,
     });
+  }
+
+  async updateAllocation(
+    allocationId: string,
+    dto: any,
+    user: any
+  ) {
+
+    const allocation = await this.allocationModel.findOneAndUpdate(
+      {
+        _id: allocationId,
+        organizationId: user.organizationId
+      },
+      dto,
+      { returnDocument: 'after' }
+    );
+
+    if (!allocation) return null;
+
+    await this.activityLogsService.logActivity({
+      userId: user.userId,
+      organizationId: user.organizationId,
+      action: 'UPDATE',
+      entityType: 'ALLOCATION',
+      entityId: allocation._id,
+      description: `Updated allocation percentage`
+    });
+
+    return allocation;
+
+  }
+
+  async deleteAllocation(allocationId: string, user: any) {
+
+    const allocation = await this.allocationModel.findOneAndDelete({
+      _id: allocationId,
+      organizationId: user.organizationId
+    });
+
+    if (!allocation) return null;
+
+    await this.activityLogsService.logActivity({
+      userId: user.userId,
+      organizationId: user.organizationId,
+      action: 'DELETE',
+      entityType: 'ALLOCATION',
+      entityId: allocation._id,
+      description: `Removed allocation`
+    });
+
+    return allocation;
+
   }
 }
