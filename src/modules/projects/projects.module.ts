@@ -7,6 +7,7 @@ import { ActivityLogsModule } from '../activitylogs/activitylogs.module';
 import { ProjectsController } from './projects.controller';
 import { Milestone, MilestoneSchema } from '../milestones/milestones.schema';
 import { DashboardModule } from '../dashboard/dashboard.module';
+import { CoreModule } from 'src/core/core.module';
 
 @Module({
   imports: [
@@ -14,10 +15,12 @@ import { DashboardModule } from '../dashboard/dashboard.module';
       { name: Project.name, schema: ProjectSchema },
       { name: Milestone.name, schema: MilestoneSchema },
     ]),
+    CoreModule,
     ActivityLogsModule,
     DashboardModule,
   ],
   providers: [ProjectsService],
   controllers: [ProjectsController],
+  exports: [ProjectsService],
 })
-export class ProjectsModule {}
+export class ProjectsModule { }

@@ -11,7 +11,8 @@ import {
 } from '../allocations/allocations.schema';
 import { Types } from 'mongoose';
 import { NotificationsService } from '../notifications/notifications.service';
-import { DashboardGateway } from './dashboard.gateway';
+import { DashboardGateway } from 'src/core/gateways/dashboard.gateway';
+
 
 @Injectable()
 export class DashboardService {

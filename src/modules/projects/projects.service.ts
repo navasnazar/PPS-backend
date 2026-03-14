@@ -6,7 +6,7 @@ import { Project, ProjectDocument } from './projects.schema';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ActivityLogsService } from '../activitylogs/activitylogs.service';
 import { Milestone, MilestoneDocument } from '../milestones/milestones.schema';
-import { DashboardGateway } from '../dashboard/dashboard.gateway';
+import { DashboardGateway } from 'src/core/gateways/dashboard.gateway';
 
 @Injectable()
 export class ProjectsService {
@@ -19,7 +19,7 @@ export class ProjectsService {
 
     private activityLogsService: ActivityLogsService,
     private dashboardGateway: DashboardGateway,
-  ) {}
+  ) { }
 
   async createProject(dto: CreateProjectDto, user: any) {
     const project = new this.projectModel({
@@ -70,5 +70,61 @@ export class ProjectsService {
     });
 
     return avgProgress;
+  }
+
+  async updateProject(
+    projectId: string,
+    dto: any,
+    user: any
+  ) {
+
+    const project = await this.projectModel.findOneAndUpdate(
+      {
+        _id: projectId,
+        organizationId: user.organizationId
+      },
+      dto,
+      { returnDocument: 'after' }
+    );
+
+    if (project) {
+
+      await this.activityLogsService.logActivity({
+        userId: user.userId,
+        organizationId: user.organizationId,
+        action: 'UPDATE',
+        entityType: 'PROJECT',
+        entityId: project._id,
+        description: `Updated project ${project.name}`
+      });
+
+    }
+
+    return project;
+
+  }
+
+  async deleteProject(projectId: string, user: any) {
+
+    const project = await this.projectModel.findOneAndDelete({
+      _id: projectId,
+      organizationId: user.organizationId
+    });
+
+    if (project) {
+
+      await this.activityLogsService.logActivity({
+        userId: user.userId,
+        organizationId: user.organizationId,
+        action: 'DELETE',
+        entityType: 'PROJECT',
+        entityId: project._id,
+        description: `Deleted project ${project.name}`
+      });
+
+    }
+
+    return project;
+
   }
 }

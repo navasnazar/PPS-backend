@@ -9,7 +9,7 @@ export class ActivityLogsService {
   constructor(
     @InjectModel(ActivityLog.name)
     private activityModel: Model<ActivityLogDocument>,
-  ) {}
+  ) { }
 
   async logActivity(data: any) {
     const log = new this.activityModel(data);
@@ -21,5 +21,16 @@ export class ActivityLogsService {
       .find({ organizationId })
       .sort({ createdAt: -1 })
       .limit(50);
+  }
+
+  async getProjectActivity(projectId: string) {
+    this.activityModel
+      .find({
+        entityType: 'PROJECT',
+        entityId: projectId
+      })
+      .sort({ createdAt: -1 })
+      .limit(100);
+
   }
 }

@@ -11,11 +11,13 @@ import {
   Allocation,
   AllocationSchema,
 } from '../allocations/allocations.schema';
-import { DashboardGateway } from './dashboard.gateway';
+
 import { NotificationsModule } from '../notifications/notifications.module';
+import { CoreModule } from 'src/core/core.module';
 
 @Module({
   imports: [
+    CoreModule,
     MongooseModule.forFeature([
       { name: Project.name, schema: ProjectSchema },
       { name: Milestone.name, schema: MilestoneSchema },
@@ -24,8 +26,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
     ]),
     NotificationsModule,
   ],
-  providers: [DashboardService, DashboardGateway],
+  providers: [DashboardService],
   controllers: [DashboardController],
-  exports: [DashboardGateway],
 })
-export class DashboardModule {}
+export class DashboardModule { }
